@@ -41,24 +41,14 @@ def update_counter(file_name, reset=False):
     2
     """
 
-    if not exists(file_name): # If this is false, we know the file does exist already.
-        file = open(file_name,'w')
-        file.write("1")
-        file.close()
-
-    if reset==False:
-        with open(file_name, 'rb+') as f:
-            current_count = int(f.read())
-            f.seek(0, 0)
-            text_to_write = str(current_count+1)
-            f.write(text_to_write.encode())
-            print(text_to_write)
-    elif reset==True:
-        with open(file_name, 'wb+') as f:
-            text_to_write = "1"
-            f.write(text_to_write.encode())
-            print(text_to_write)
-
+    counter = 0
+    if not reset and exists(file_name):
+        counter = load(open(file_name, 'rb'))
+        counter+=1
+    else:
+        counter=1
+    dump(counter, open(file_name, 'wb'))
+    return counter
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
